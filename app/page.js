@@ -1,5 +1,4 @@
-import AllProducts from "./(root)/components/allProducts/AllProducts";
-import Banner from "./(root)/components/banner/Banner";
+import EventSchedule from "./(root)/components/eventSchedule/EventSchedule";
 
 export default async function Home() {
   const res = await fetch("https://fakestoreapi.com/products");
@@ -8,8 +7,7 @@ export default async function Home() {
 
   return (
     <>
-      <Banner />
-      <AllProducts products={slicedProd} />
+      <EventSchedule />
     </>
   );
 }

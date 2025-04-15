@@ -1,88 +1,91 @@
 "use client";
-import { Menu, Search, X } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { FiShoppingCart } from "react-icons/fi";
+import { useState } from "react";
+import { FaBars, FaTimes } from "react-icons/fa";
+import TopNav from "../topNav/TopNav";
 
 const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [open, setOpen] = useState(false);
+  const toggleMenu = () => setOpen(!open);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const navItems = [
+    { label: "Home", href: "#home", className: "text-gray-700" },
+    { label: "About", href: "#services", className: "text-[#EE263D]" },
+    { label: "Event Booking", href: "#about", className: "text-gray-700" },
+  ];
+
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="container mx-auto flex items-center justify-between p-4">
-        {/* Logo */}
-        <Link href="/" className="text-2xl font-bold text-gray-800">
-          ShopEase
-        </Link>
+    <header className="w-full  ">
+      {/* Top Nav Bar */}
+      <div className=" bg-[#171717]">
+        <TopNav />
+      </div>
 
-        {/* Desktop Menu */}
-        <div className={`md:flex space-x-6 ${isMobile ? "hidden" : "flex"}`}>
-          <Link
-            href="/shop"
-            className="hover:text-blue-600 text-[#333] text-[18px]"
-          >
-            Shop
+      {/* Main Header */}
+      <div className=" bg-white">
+        <div className="max-w-[90%] w-[95%] mx-auto flex items-center justify-between p-4 md:px-8">
+          {/* Logo */}
+          <Link href="/">
+            <img
+              src="/images/logo.png"
+              alt="Logo"
+              className="h-10 w-auto object-contain"
+            />
           </Link>
-          <Link
-            href="/about"
-            className="hover:text-blue-600 text-[#333] text-[18px]"
-          >
-            About
-          </Link>
-          <Link
-            href="/contact"
-            className="hover:text-blue-600 text-[#333] text-[18px]"
-          >
-            Contact
-          </Link>
-        </div>
 
-        {/* Icons */}
-        <div className="flex items-center space-x-4">
-          <Search className="w-5 h-5 cursor-pointer text-black" />
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-6">
+            {navItems.map((item, index) => (
+              <a
+                key={index}
+                href={item.href}
+                className={`${item.className} hover:text-blue-600 font-[20px] font-poppins transition`}
+              >
+                {item.label}
+              </a>
+            ))}
 
-          <FiShoppingCart className="w-5 h-5 cursor-pointer text-black" />
-
-          {/* Mobile Menu Toggle */}
-          {isMobile && (
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden"
+            <a
+              href="#contact"
+              className="ml-4 bg-[#171717] text-[#F8DA55] px-4 py-[10px] rounded-lg font-poppins hover:bg-[#222] transition"
             >
-              {menuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          )}
+              Contact Us
+            </a>
+          </nav>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={toggleMenu}
+            className="md:hidden text-2xl text-gray-700"
+          >
+            {open ? <FaTimes /> : <FaBars />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {menuOpen && isMobile && (
-        <div className="md:hidden bg-white shadow-md py-4 px-6 flex flex-col space-y-4">
-          <Link href="/shop" className="hover:text-blue-600">
-            Shop
-          </Link>
-          <Link href="/about" className="hover:text-blue-600">
-            About
-          </Link>
-          <Link href="/contact" className="hover:text-blue-600">
-            Contact
-          </Link>
+      {/* Mobile Nav */}
+      {open && (
+        <div className="md:hidden bg-white shadow-md">
+          {navItems.map((item, index) => (
+            <a
+              key={index}
+              href={item.href}
+              className="block px-6 py-3 text-gray-700 hover:bg-gray-100 font-poppins"
+              onClick={toggleMenu}
+            >
+              {item.label}
+            </a>
+          ))}
+          <a
+            href="#contact"
+            className="block px-6 py-3 text-blue-600 font-semibold hover:bg-blue-50 font-poppins"
+            onClick={toggleMenu}
+          >
+            Contact Us
+          </a>
         </div>
       )}
-    </nav>
+    </header>
   );
 };
 
